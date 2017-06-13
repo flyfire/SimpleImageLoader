@@ -25,7 +25,7 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
     public ImageListener mListener;
     private DisplayConfig mConfig;
 
-    private LoadPolicy mLoadPolicy;
+    private LoadPolicy mLoadPolicy = SimpleImageLoader.getInstance().getConfig().getLoadPolicy();
     private int mSerialNum;
 
     public BitmapRequest(ImageView imageView, String imageUrl, DisplayConfig displayConfig,

@@ -41,7 +41,7 @@ public class ImageLoaderConfig {
         return mThreadCount;
     }
 
-    static class Builder {
+    public static class Builder {
         private BitmapCache cache;
         private LoadPolicy loadPolicy;
         private DisplayConfig config;

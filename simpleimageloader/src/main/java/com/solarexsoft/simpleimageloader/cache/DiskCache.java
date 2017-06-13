@@ -3,7 +3,6 @@ package com.solarexsoft.simpleimageloader.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.solarexsoft.simpleimageloader.core.BitmapRequest;
@@ -49,9 +48,10 @@ public class DiskCache implements BitmapCache {
     private DiskCache(Context context, String path) {
         //use context to get cache directory
         //use external disk to watch the file change
-        File file = new File(Environment.getExternalStorageDirectory(), path);
+        //File file = new File(Environment.getExternalStorageDirectory(), path);
+        File file = new File(context.getCacheDir(), path);
         if (!file.exists()) {
-            file.mkdirs();
+            file.mkdir();
         }
         try {
             mDiskLruCache = DiskLruCache.open(file, 1, 1, 5 * 1024 * 1024);
