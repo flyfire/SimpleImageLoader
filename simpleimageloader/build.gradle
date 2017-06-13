@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 25
@@ -29,4 +31,74 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.jakewharton:disklrucache:2.0.2'
     testCompile 'junit:junit:4.12'
+}
+
+
+version = '1.0.0'
+def siteUrl='https://github.com/flyfire/SimpleImageLoaderDemo'
+def gitUrl='https://github.com/flyfire/SimpleImageLoaderDemo.git'
+group = 'com.solarexsoft.simpleimageloader'
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                // Add your description here
+                name '类似UniversalImageLoader的图片加载框架'     //项目描述
+                url siteUrl
+                licenses {
+                    license {
+                        name 'Massachusetts Institute of Technology'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'solarex'        //填写的一些基本信息
+                        name 'Solarex'
+                        email 'rh.hou.work@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        userOrg = "solarexsoft"
+        repo = "maven"
+        name = "SimpleImageLoader"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["MIT"]
+        publish = true
+    }
 }
